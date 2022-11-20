@@ -1,0 +1,26 @@
+{
+    "name": "eva/http-kernel",
+    "description": "Http Kernel",
+    "keywords": [],
+    "homepage": "https://github.com/thewarmthofyourhands",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "thewarmthofyourhands"
+        }
+    ],
+    "require": {
+        "php": ">=8.1",
+        "eva/http-request": "dev-main",
+        "eva/foundation": "dev-main",
+        "eva/event-dispatcher": "dev-main",
+        "eva/dependency-injection": "dev-main",
+        "eva/env": "dev-master",
+        "eva/console": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "Eva\\HttpKernel\\": "src/"
+        }
+    }
+}
