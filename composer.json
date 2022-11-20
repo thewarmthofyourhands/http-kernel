@@ -15,8 +15,8 @@
         "eva/foundation": "dev-main",
         "eva/event-dispatcher": "dev-main",
         "eva/dependency-injection": "dev-main",
-        "eva/env": "dev-master",
-        "eva/console": "dev-master"
+        "eva/env": "dev-main",
+        "eva/console": "dev-main"
     },
     "autoload": {
         "psr-4": {
