@@ -7,6 +7,7 @@ namespace Eva\HttpKernel\EventListeners;
 use Eva\Env\Env;
 use Eva\Http\Message\Response;
 use Eva\HttpKernel\Events\ExceptionEvent;
+use Eva\HttpKernel\Exceptions\HttpException;
 
 class ExceptionListener
 {
@@ -14,13 +15,23 @@ class ExceptionListener
 
     public function __invoke(ExceptionEvent $exceptionEvent): ExceptionEvent
     {
-        $message = $exceptionEvent->getThrowable()->getMessage();
+        $throwable = $exceptionEvent->getThrowable();
 
-        if ($this->env->get('APP_DEV') === 'dev') {
-            $message =  'error: ' . $exceptionEvent->getThrowable()->getTraceAsString() . $message;
+        $message = sprintf(
+            'error code: %s, message: %s, file: %s, line: %s, trace: %s',
+            $throwable->getCode(),
+            $throwable->getMessage(),
+            $throwable->getFile(),
+            $throwable->getLine(),
+            $throwable->getTraceAsString(),
+        );
+
+        if ($throwable instanceof HttpException) {
+            $response = new Response($throwable->getResponseStatusCode(), [], $message);
+        } else {
+            $response = new Response(500, [], $message);
         }
 
-        $response = new Response($exceptionEvent->getThrowable()->getCode(), [], $message);
         $exceptionEvent->setResponse($response);
 
         return $exceptionEvent;

@@ -4,24 +4,17 @@ declare(strict_types=1);
 
 namespace Eva\HttpKernel;
 
-use Eva\DependencyInjection\ContainerInterface;
 use Eva\Http\Message\RequestInterface;
-use Eva\Http\Message\ResponseInterface;
 use Eva\Http\Parser\HttpRequestParser;
+use Eva\HttpKernel\Exceptions\NotFoundRouteException;
 
 class Router implements RouterInterface
 {
     protected array $routes = [];
 
-    public function __construct(protected ContainerInterface $container) {}
-
-    public function execute(RequestInterface $request): ResponseInterface
-    {
-        [$class, $method, $args] = $this->findRoute($request);
-
-        return $this->container->get($class)->{$method}($request, ...$args);
-    }
-
+    /**
+     * @throws NotFoundRouteException
+     */
     public function findRoute(RequestInterface $request): array
     {
         $uri = HttpRequestParser::parseUri($request);
@@ -35,7 +28,7 @@ class Router implements RouterInterface
             $foundCount = preg_match($routePattern, $uri->getPath(), $matches);
             unset($matches[0]);
 
-            if ($request->getMethod()->value === $routeConfig['method'] && $foundCount === 1) {
+            if ($foundCount === 1 && $request->getMethod()->value === $routeConfig['method']) {
                 $route = explode('::', $routeConfig['handler']);
                 $route[] = $matches;
 
@@ -43,7 +36,7 @@ class Router implements RouterInterface
             }
         }
 
-        throw new \RuntimeException('Route not found', 404);
+        throw new NotFoundRouteException('Route is not found');
     }
 
     public function setRoutes(array $routes): void

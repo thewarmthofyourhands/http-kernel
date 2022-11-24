@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Eva\HttpKernel\Events;
 
 use Eva\Http\Message\RequestInterface;
-use Eva\Http\PSR7\Interfaces\ResponseInterface;
+use Eva\Http\Message\ResponseInterface;
 
 class TerminateEvent
 {
