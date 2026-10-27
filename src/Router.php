@@ -22,7 +22,8 @@ class Router implements RouterInterface
         foreach ($this->routes as $route => $routeConfig) {
             $routePattern = '/^' . addcslashes(preg_replace(
                 '/\/:(\w+)/',
-                '/(\w+)',
+                '/([^/]+)',
+                // '/(\w+)',
                 $routeConfig['uri']
             ), '/') . '$/';
             $foundCount = preg_match($routePattern, $uri->getPath(), $matches);
